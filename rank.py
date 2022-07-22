@@ -40,6 +40,7 @@ def get_bdate_info(start_date, end_date) :
     date = date[date.일자 <= datetime.strftime(datetime.strptime(end_date, "%Y%m%d"),"%Y-%m-%d")]
     return date
 
+
 def get_kospi_code(mkt, stddate):
     if mkt == '코스피' : ind = '001'
     elif mkt == '코스피50' : ind = '035'
@@ -203,8 +204,14 @@ def get_df_by_mkt(start_date, end_date, mkt_list) :
         df_all_temp = get_pf(rtn_rank, 10)
         df_all_temp['시장구분'] = mkt_list[s]
         df_all = pd.concat([df_all, df_all_temp], axis=0)
+    df_all.Code = 'A' + df_all['Code']
+    df_all = df_all.drop_duplicates(subset=['StdDate', 'Code', '종목명'])
+
     return df_all
 
-start_date = '20220323'
-end_date = '20220701'
+start_date = '20170101'
+end_date = '20220722'
 df_all = get_df_by_mkt(start_date, end_date, mkt_list)
+
+
+df_all.to_excel('C:/Users/ysj/Desktop/pffㄹ.xlsx')
